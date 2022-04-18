@@ -4,9 +4,6 @@ pipeline {
     tools {
         maven '3.8.5'
     }
-    parameters {
-        string(name: 'SERVER_IP', defaultValue: '3.111.218.142', description: 'Provide production server IP Address.')
-    }
 
     stages {
         stage('Source') {
@@ -28,7 +25,7 @@ pipeline {
             steps {
                 sh '''
                     version=$(perl -nle 'print "$1" if /<version>(v\\d+\\.\\d+\\.\\d+)<\\/version>/' pom.xml)
-                    rsync -rvz -e 'ssh -p 2232' target/news-${version}.jar root@${SERVER_IP}:/opt/
+                    java -jar -Dserver.port=8085 target/news-${version}.jar
                 '''
             }
         }
