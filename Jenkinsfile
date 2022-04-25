@@ -13,7 +13,6 @@ pipeline {
                         returnStdout: true
                     ).trim()
          AWS_DEFAULT_REGION="ap-south-1"
-  }
     }
 
     stages {
