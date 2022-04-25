@@ -44,6 +44,7 @@ pipeline {
                 sh '''
                     ssh -o StrictHostKeyChecking=no jeri@${SERVER_IP} -p 2232 "sudo ~/deploy.sh ${APP_VERSION}"
                 '''
+            }
         }
     }
 }
