@@ -4,7 +4,6 @@ pipeline {
     tools {
         maven '3.8.5'
     }
-
     environment {
         APP_VERSION = sh(
                     script: '''
@@ -14,7 +13,9 @@ pipeline {
                     ).trim()
          AWS_DEFAULT_REGION="ap-south-1"
     }
-
+    parameters {
+        string(name: 'SERVER_IP', defaultValue: '13.232.217.247', description: 'Provide production server IP Address.')
+    }
     stages {
         stage('Source') {
             steps {
@@ -37,6 +38,12 @@ pipeline {
                 s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'jeribucket123', path:'spring-news-app/')
                 }
             }
+        }
+        stage('Deploying Artifcats') {
+            steps {
+                sh '''
+                    ssh -o StrictHostKeyChecking=no jeri@${SERVER_IP} -p 2232 "sudo ~/deploy.sh ${APP_VERSION}"
+                '''
         }
     }
 }
