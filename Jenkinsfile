@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Source') {
             steps {
-                git branch: 'main', changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/ajilraju/spring-boot-jsp.git'
+                git branch: 'improved', changelog: false, credentialsId: 'github', poll: false, url: 'git@github.com:jeri7758/spring-boot-jsp.git'
             }
         }
         stage('Test') {
@@ -34,15 +34,8 @@ pipeline {
             steps {
                 withAWS(profile:'default') {
     
-                    s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'keyshell-artifactory', path:'spring-news-app/')
+                    s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'jeribucket123', path:'spring-news-app/')
                 }
-            }
-        }
-        stage('Deploying Artifcats') {
-            steps {
-                sh '''
-                    ssh -o StrictHostKeyChecking=no deployer@3.142.145.171 "sudo ~/deploy.sh ${APP_VERSION}"
-                '''
             }
         }
     }
