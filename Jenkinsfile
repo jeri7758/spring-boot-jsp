@@ -32,9 +32,8 @@ pipeline {
         }
         stage('Publishing Artifcats') {
             steps {
-                withAWS(profile:'default') {
-    
-                    s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'jeribucket123', path:'spring-news-app/')
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'jeribucket123', path:'spring-news-app/')
                 }
             }
         }
